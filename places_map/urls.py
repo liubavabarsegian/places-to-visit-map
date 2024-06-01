@@ -16,8 +16,20 @@ Including another URLconf
 """
 from django.urls import include, path
 from django.contrib import admin
+from django.conf import settings
+from django.contrib.staticfiles.urls import static
+from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
-]
+    path('ckeditor/', include('ckeditor_uploader.urls')),
+    path('djeym/', include('djeym.urls', namespace='djeym')),
+    path('hello/', views.map, name='djeym'),
+] + static(
+    settings.STATIC_URL,
+    document_root=settings.STATIC_ROOT
+) + static(
+    settings.MEDIA_URL,
+    document_root=settings.MEDIA_ROOT
+)
