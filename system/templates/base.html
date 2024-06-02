@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'base.css'%}" type="text/css">
+</head>
+<body>
+  <div id="header">
+    <span class="logo">Pinpoint</span>
+    {% if request.user.is_authenticated %}
+      <ul class="menu">
+        <li {% if section == 'dashboard' %}class="selected"{% endif %}>
+          <a href="{% url 'dashboard' %}">My dashboard</a>
+        </li>
+    {% endif %}
+    <span class="user">
+        {% if request.user.is_authenticated %}
+            Hello {{ request.user.first_name }},
+            <form id="logout-form" action="{% url 'logout' %}" method="POST">
+              {% csrf_token %}
+              <button type="submit">Выход</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}">Log-in</a>
+        {% endif %}
+    </span>
+  </div>
+  
+  <div class="gcontainer">
+  <div class="container">
+
+    <div class="earth">
+    </div>
+
+    <div class="orbit">
+      <div class="satelite">
+        <div class="head"></div>
+        <div class="body"></div>
+        <div class="wings">
+          <div class="wing"></div>
+          <div class="wing"></div>
+        </div>
+        <div class="tail"></div>
+        <div class="antena">
+          <div class="waves">
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="parent">
+      <div class="child">
+        {% block content %}
+        
+        {% endblock %}
+      </div>
+    </div>
+
+  </div>
+  </div>
+</body>
+</html>
