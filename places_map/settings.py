@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'system.apps.SystemConfig',
+    'services',
 ]
 
 SITE_ID = 1
@@ -137,7 +138,7 @@ EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 
 EMAIL_HOST_USER = 'ivashevskij.dima@yandex.ru'
-EMAIL_HOST_PASSWORD = 'zcrvdqwxthrauzah'
+EMAIL_HOST_PASSWORD = ''
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
