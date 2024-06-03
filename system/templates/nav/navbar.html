@@ -1,0 +1,40 @@
+{% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/navbar.css'%}" type="text/css">
+  <script src="{% static 'js/navbar.js' %}"></script>
+</head>
+
+<nav>
+  <div class="navbar">
+      <span class="user">
+        {% if request.user.is_authenticated %}
+
+    <div class="dropdown">
+      <button class="dropbtn" onclick="dropdownfunc()">Выпадашка
+        <i class="fa fa-caret-down"></i>
+      </button>
+
+    <div class="dropdown-content" id="dropdownContent">
+        Hello {{ request.user.first_name }},
+      <a href="">Мой профиль</a> <!--тут должна быть ссылка на профиль, она пока не работает -->
+      {% if request.user.is_authenticated %}
+          <a href="{% url 'dashboard' %}">Дэшборд</a>
+          <a href="{% url 'login' %}">Обратно на страницу логина (убрать)</a>
+          <form class="logout-form" id="logout-form" action="{% url 'logout' %}" method="POST">
+              {% csrf_token %}
+              <button class="logout-button">Выход</button>
+          </form>
+        {% endif %}
+
+          {% else %}
+            <a href="{% url 'login' %}">Есть аккаунт? Войти</a>
+            <a href="{% url 'register' %}"> Регистрация (платно и с смс) </a>
+          {% endif %}
+
+        </span>
+    </div>
+    </div>
+  </div>
+</nav>
