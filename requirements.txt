@@ -3,3 +3,5 @@ Django==5.0.6
 sqlparse==0.5.0
 psycopg2==2.9.9
 pytils==0.4.1
+pylint
+django_linter
