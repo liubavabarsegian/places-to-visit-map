@@ -6,9 +6,9 @@ function dropdownfunc() {
 // Закрыть раскрывающийся список, если пользователь щелкнет за его пределами.
 window.onclick = function(e) {
   if (!e.target.matches('.dropbtn')) {
-  var myDropdown = document.getElementById("dropdownContent");
-    if (myDropdown.classList.contains('show')) {
-      myDropdown.classList.remove('show');
+  let dropDownContent = document.getElementById("dropdownContent");
+    if (dropDownContent.classList.contains('show')) {
+      dropDownContent.classList.remove('show');
     }
   }
 }

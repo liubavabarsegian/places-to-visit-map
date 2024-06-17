@@ -1,40 +1,50 @@
 {% load static %}
-<head>
+<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/navbar.css'%}" type="text/css">
   <script src="{% static 'js/navbar.js' %}"></script>
-</head>
 
 <nav>
-  <div class="navbar">
-      <span class="user">
-        {% if request.user.is_authenticated %}
-
-    <div class="dropdown">
-      <button class="dropbtn" onclick="dropdownfunc()">Выпадашка
-        <i class="fa fa-caret-down"></i>
-      </button>
-
-    <div class="dropdown-content" id="dropdownContent">
-        Hello {{ request.user.first_name }},
-      <a href="">Мой профиль</a> <!--тут должна быть ссылка на профиль, она пока не работает -->
+  <ul id="navbar">
+          <li class="logo">
+              <a href="{% url 'dashboard' %}" class="logo-link">
+                  <span class="logo-text">PinPoint</span>
+              </a>
+          </li>
       {% if request.user.is_authenticated %}
-          <a href="{% url 'dashboard' %}">Дэшборд</a>
-          <a href="{% url 'login' %}">Обратно на страницу логина (убрать)</a>
-          <form class="logout-form" id="logout-form" action="{% url 'logout' %}" method="POST">
+
+          <li style="float:right;">
+              <button class="dropbtn" onclick="dropdownfunc()">
+            <i class="fa fa-caret-down"></i>
+              </button>
+          </li>
+          <li class="filter" style="float:right;">
+              <a href=""></a>
+          </li>
+          <div class="dropdown-content" id="dropdownContent">
+            <a href="{% url 'profile_detail' request.user.profile.slug %}">Мой профиль</a>
+                {% if request.user.is_authenticated %}
+            <a href="">Мой вишлист</a>
+            <a href="{% url 'login' %}">Обратно на страницу логина (убрать)</a>
+            <form class="logout-form" id="logout-form" action="{% url 'logout' %}" method="POST">
               {% csrf_token %}
               <button class="logout-button">Выход</button>
-          </form>
-        {% endif %}
+            </form>
+                {% endif %}
 
-          {% else %}
-            <a href="{% url 'login' %}">Есть аккаунт? Войти</a>
-            <a href="{% url 'register' %}"> Регистрация (платно и с смс) </a>
-          {% endif %}
-
-        </span>
-    </div>
-    </div>
-  </div>
+                {% else %}
+          <li class="login_register">
+              <a href="{% url 'login' %}">
+                  <span class="login_register"> Есть аккаунт? Войти </span>
+              </a>
+          </li>
+          <li class="login_register">
+              <a href="{% url 'register' %}">
+                  <span class="login_register"> Регистрация (платно и с смс)</span>
+              </a>
+          </li>
+                {% endif %}
+            </div>
+  </ul>
 </nav>
