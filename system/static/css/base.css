@@ -13,7 +13,7 @@ body {
   }
   
   .earth {
-    background-image: url("img/earth.png");
+    background-image: url("../img/earth.png");
     width: 513px;
     height: 513px;
     display: flex;
