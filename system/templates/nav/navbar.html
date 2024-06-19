@@ -23,13 +23,18 @@
               <a href=""></a>
           </li>
           <div class="dropdown-content" id="dropdownContent">
-            <a href="{% url 'profile_detail' request.user.profile.slug %}">Мой профиль</a>
+            <a href="{% url 'profile_detail' request.user.profile.slug %}">
+                <span>Мой профиль</span>
+            </a>
                 {% if request.user.is_authenticated %}
-            <a href="">Мой вишлист</a>
-            <a href="{% url 'login' %}">Обратно на страницу логина (убрать)</a>
+            <a href="">
+                <span>Мой список любимых мест</span>
+            </a>
             <form class="logout-form" id="logout-form" action="{% url 'logout' %}" method="POST">
               {% csrf_token %}
-              <button class="logout-button">Выход</button>
+              <button class="logout-button">
+                  <span>Выход</span>
+              </button>
             </form>
                 {% endif %}
 
