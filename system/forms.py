@@ -1,8 +1,9 @@
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, SetPasswordForm, PasswordResetForm
 from django.contrib.auth.models import User
 from django.core import exceptions
 from django import forms
 from .models import Profile
+
 
 class UserUpdateForm(forms.ModelForm):
     """
@@ -20,7 +21,7 @@ class UserUpdateForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs.update({
-                'class': 'form-control',
+                'class': 'form',
                 'autocomplete': 'off'
             })
 
@@ -50,7 +51,7 @@ class ProfileUpdateForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs.update({
-                'class': 'form-control',
+                'class': 'form',
                 'autocomplete': 'off'
             })
 
@@ -79,15 +80,14 @@ class UserRegisterForm(UserCreationForm):
         """
         super().__init__(*args, **kwargs)
         for field in self.fields:
-            self.fields['username'].widget.attrs.update({"placeholder": 'Придумайте свой логин'})
-            self.fields['email'].widget.attrs.update({"placeholder": 'Введите свой email'})
-            self.fields['first_name'].widget.attrs.update({"placeholder": 'Ваше имя'})
-            self.fields["last_name"].widget.attrs.update({"placeholder": 'Ваша фамилия'})
-            self.fields['password1'].widget.attrs.update({"placeholder": 'Придумайте свой пароль'})
-            self.fields['password2'].widget.attrs.update({"placeholder": 'Повторите придуманный пароль'})
-            self.fields[field].widget.attrs.update({"class": "form-control", "autocomplete": "off"})
+            self.fields['username'].widget.attrs.update({'class': 'form', "placeholder": 'Придумайте свой логин'})
+            self.fields['email'].widget.attrs.update({'class': 'form', "placeholder": 'Введите свой email'})
+            self.fields['first_name'].widget.attrs.update({'class': 'form', "placeholder": 'Ваше имя'})
+            self.fields["last_name"].widget.attrs.update({'class': 'form', "placeholder": 'Ваша фамилия'})
+            self.fields['password1'].widget.attrs.update({'class': 'form', "placeholder": 'Придумайте свой пароль'})
+            self.fields['password2'].widget.attrs.update({'class': 'form', "placeholder": 'Повторите придуманный пароль'})
+            self.fields[field].widget.attrs.update({'class': 'form', "autocomplete": "off"})
 
-from django.contrib.auth.forms import AuthenticationForm
 
 class UserLoginForm(AuthenticationForm):
     """
@@ -100,15 +100,14 @@ class UserLoginForm(AuthenticationForm):
         """
         super().__init__(*args, **kwargs)
         for field in self.fields:
-            self.fields['username'].widget.attrs['placeholder'] = 'Логин пользователя'
-            self.fields['password'].widget.attrs['placeholder'] = 'Пароль пользователя'
-            self.fields['username'].label = 'Логин'
+            self.fields['username'].widget.attrs.update({'class': 'form'})
+            self.fields['password'].widget.attrs.update({'class': 'form'})
+            self.fields['username'].widget.attrs.update({'class': 'form'})
             self.fields[field].widget.attrs.update({
-                'class': 'form-control',
+                'class': 'form',
                 'autocomplete': 'off'
             })
 
-from django.contrib.auth.forms import SetPasswordForm
 
 class UserPasswordChangeForm(SetPasswordForm):
     """
@@ -125,8 +124,6 @@ class UserPasswordChangeForm(SetPasswordForm):
                 'autocomplete': 'off'
             })
 
-from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
-
 
 class UserForgotPasswordForm(PasswordResetForm):
     """
@@ -140,7 +137,7 @@ class UserForgotPasswordForm(PasswordResetForm):
         super().__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs.update({
-                'class': 'form-control',
+                'class': 'form',
                 'autocomplete': 'off'
             })
 
@@ -157,6 +154,6 @@ class UserSetNewPasswordForm(SetPasswordForm):
         super().__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs.update({
-                'class': 'form-control',
+                'class': 'form',
                 'autocomplete': 'off'
             })
