@@ -1,0 +1,76 @@
+.form-container{
+  border: 1px solid black;
+  border-radius: 10px;
+}
+.form-header {
+    font-family: Arial, Helvetica, sans-serif;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+.form {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  border-radius: 5px;
+  display: block;
+  width: 300px;
+  padding: 0.375rem 0.75rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #bdbdbd;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form:focus {
+  color: #212529;
+  background-color: #fff;
+  border-color: #bdbdbd;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(158, 158, 158, 0.25);
+}
+
+.login_button{
+  display: block;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  font-size: 18px;
+  font-family: sans-serif;
+  text-decoration: none;
+  color: #333;
+  border: 2px solid #333;
+  letter-spacing: 2px;
+  text-align: center;
+  position: relative;
+  transition: all .35s;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.login_button span{
+  position: relative;
+  z-index: 2;
+}
+
+.login_button:after{
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: #0044cc;
+  transition: all .35s;
+  border-radius: 10px;
+}
+
+.login_button:hover{
+  color: #fff;
+}
+
+.login_button:hover:after {
+  width: 100%;
+}

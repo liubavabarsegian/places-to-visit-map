@@ -1,25 +1,54 @@
 {% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+{% include 'nav/navbar.html' %}
 {% block content %}
-<div class="card border-0">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-9">
-                     <h5 class="card-title">
-                        {{ profile }}
-                    </h5>
-                    <div class="card-text">
-                        <ul>
-                            <li>Никнейм: {{ profile.user.username }}</li>
-                            {% if profile.user.get_full_name %} <li>Имя и фамилия: {{ profile.user.get_full_name }}</li> {% endif %}
-                            <li>Заходил: {{ profile.user.last_login }}</li>
-                            <li>Дата рождения: {{ profile.birth_date }}</li>
-                            <li>О себе: {{ profile.bio }}</li>
-                        </ul>
-                    <a href="{% url 'profile_edit' %}" class="btn btn-sm btn-primary">Редактировать профиль</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <link rel="stylesheet" href="{% static 'css/profile_detail.css'%}" type="text/css">
+
+
+    <div class="profile-container">
+        <h2 class="card-title">
+            Добро пожаловать на борт, {{ profile }}!
+        </h2>
+        <ul class="profile-list">
+            <li>
+                <span class="index-text">
+                    Никнейм:
+                </span> {{ profile.user.username }}
+            </li>
+            {% if profile.user.get_full_name %}
+                <li>
+                    <span class="index-text">
+                        Имя и фамилия:
+                    </span>
+                    {{ profile.user.get_full_name }}
+                </li> {% endif %}
+            <li>
+                <span class="index-text">
+                    E-mail:
+                </span>
+                    {{ profile.user.email }}
+            </li>
+            <li>
+                <span class="index-text">
+                    Дата рождения:
+                </span>
+                    {{ profile.birth_date }}
+            </li>
+            <li>
+                <span class="index-text">
+                    О себе:
+                </span>
+                    {{ profile.bio }}
+            </li>
+        </ul>
+        <a href="{% url 'profile_edit' %}" class="redact_button" >
+            <span>
+                Редактировать профиль
+            </span>
+        </a>
     </div>
 {% endblock %}
