@@ -88,15 +88,16 @@ body {
 
 .profile_redact {
   transform: scale(0.8);
+  overflow: hidden;
   display: block;
   position: absolute;
   background-image: url("../img/raketa.png");
   background-repeat: no-repeat;
   background-size: contain;
   top: 10%;
-  left: 72%;
+  left: 76%;
   height: 100%;
-  width: 100%;
+  width: 380px;
 
 }
 
