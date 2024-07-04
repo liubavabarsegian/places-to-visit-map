@@ -71,5 +71,6 @@
   color: #fff;
 }
 
-.login_button:hover:after{
+.login_button:hover:after {
   width: 100%;
+}

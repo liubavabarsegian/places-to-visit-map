@@ -10,6 +10,16 @@ body {
     overflow: hidden;
     align-items: center;
   }
+
+    .container{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    transform:scalex(0.9);
+    transform-origin:center center;
+    margin-top: 10%;
+  }
   
   .earth {
     background-image: url("../img/earth.png");
@@ -37,15 +47,7 @@ body {
       border: 1px solid black;
   }
 
-  .container{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    transform:scalex(0.9);
-    transform-origin:center center;
-    margin-top: 7%;
-  }
+
   *:before,*:after{
     display:block;
     position:absolute;
