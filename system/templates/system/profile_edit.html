@@ -3,19 +3,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/profile_edit.css'%}" type="text/css">
-{% include 'nav/navbar.html' %}
-{% block content %}
-                <div class="tuning"></div>
-<div class="container">
 
+{% block content %}
+
+<body>
+<div class="profile_redact"></div>
+    {% include 'nav/navbar.html' %}
       <form method="post" enctype="multipart/form-data" class="form">
-    <h1 class="title"> Редактирование профиля</h1>
+          <h1 class="title"> Пасхалко</h1>
          {% csrf_token %}
          {{ user_form.as_p }}
          {{ form.as_p }}
             <button type="submit" class="confirm_button">
-                <span>Подтвердить изменение профиля</span>
+                <span>Подтвердить изменения</span>
             </button>
       </form>
-</div>
+</body>
 {% endblock %}

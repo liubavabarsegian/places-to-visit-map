@@ -1,15 +1,29 @@
 body {
-    margin: 0;
+  background-color: #E8E8F6;
+  box-sizing: border-box;
+  margin: 0;
+  height: 100%;
+  width: auto;
 }
 .container{
   position: relative;
+  height: 100%;
+  width: auto;
+
+}
+
+.title {
+  margin: 0;
+  width: 80%;
 }
 .form {
+  position: relative;
+  display: block;
+  height: 50px;
+  width: 90%;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 15px;
   border-radius: 5px;
-  display: block;
-  width: 100%;
   padding: 0.375rem 0.75rem;
   font-weight: 400;
   line-height: 1.5;
@@ -19,6 +33,7 @@ body {
   border: 1px solid #bdbdbd;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
+
 
 .form:focus {
   color: #212529;
@@ -30,7 +45,7 @@ body {
 
 .confirm_button{
   display: block;
-  width: 100%;
+  width: 90%;
   height: 40px;
   line-height: 40px;
   font-size: 18px;
@@ -71,10 +86,17 @@ body {
   width: 100%;
 }
 
-.tuning {
+.profile_redact {
+  transform: scale(0.8);
+  display: block;
   position: absolute;
-  background-image: url("../img/earth.png");
-  width: 513px;
-  height: 513px;
+  background-image: url("../img/raketa.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  top: 10%;
+  left: 72%;
+  height: 100%;
+  width: 100%;
+
 }
 
