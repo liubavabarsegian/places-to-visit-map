@@ -6,6 +6,12 @@ body {
   width: auto;
 }
 
+.gcontainer {
+  height: 100%;
+  width: auto;
+
+}
+
 .title {
   font-size: 40px;
   font-family: Arial, Helvetica, sans-serif;
@@ -103,14 +109,15 @@ body {
 
 .rocket
 {
-  width: 100px;
-  height: 100px;
+  display: block;
+  height: 500px;
   background-image: url("../img/rocket.png");
-  position: absolute;
-  /*right: 100px;*/
-  /*bottom: 200px;*/
+  background-repeat: no-repeat;
+  position: relative;
+  margin: 0;
+
   /*offset-path: path('M1005.5 585C999 305 781.5 94 723 79C705.443 74.4982 592 1 430.5 96.5C363.5 136.119 329 381.5 231 375C154.251 369.91 -13.5 2.5 2.00001 1');*/
-  /*offset-rotate: auto 90deg;*/
+  /*offset-rotate: auto 90deg; */
 }
 
 .animateShake
