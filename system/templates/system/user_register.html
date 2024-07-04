@@ -12,7 +12,7 @@
 
 <span class="title">Регистрация на сайте</span>
     <div class="planet"></div>
-    <div id ="rocket" class="rocket"></div>
+<!--    <div id ="rocket" class="rocket"></div> -->
     <div class="container">
         <form method="post" action="{% url 'register' %}" enctype="multipart/form-data" class="form">
             {% csrf_token %}
@@ -21,4 +21,3 @@
         </form>
     </div>
 {% endblock %}
-
