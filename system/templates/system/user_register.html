@@ -3,23 +3,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/user_register.css'%}" type="text/css">
-    <link rel="icon" href="{% static 'img/favicon.ico'%}" type="image/x-icon">
+    <link rel="icon" href="{% static 'img/favicon.ico'%}">
+    <script src async="{% static 'js/user_register_rocket.js' %}"></script>
+
 {% include 'nav/navbar.html' %}
+
 {% block content %}
-<div class="gcontainer">
+
 <span class="title">Регистрация на сайте</span>
-<!--    <div id ="rocket" class="rocket"></div> -->
     <div class="planet"></div>
+    <div id ="rocket" class="rocket"></div>
     <div class="container">
         <form method="post" action="{% url 'register' %}" enctype="multipart/form-data" class="form">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="reg_button" id='reg_button'>
-                <span>Поехали!</span>
-            </button>
+            <button type="submit" class="reg_button"><span>Поехали!</span></button>
         </form>
     </div>
-</div>
 {% endblock %}
-  <script src="{% static 'js/user_register_rocket.js' %}" type="text/javascript"></script>
 
