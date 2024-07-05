@@ -6,9 +6,14 @@ function dropdownfunc() {
 // Закрыть раскрывающийся список, если пользователь щелкнет за его пределами.
 window.onclick = function(e) {
   if (!e.target.matches('.dropbtn')) {
-  let dropDownContent = document.getElementById("dropdownContent");
-    if (dropDownContent.classList.contains('show')) {
-      dropDownContent.classList.remove('show');
+  let dropdownContent = document.getElementById("dropdownContent");
+    if (dropdownContent.classList.contains('show')) {
+      dropdownContent.classList.remove('show');
     }
   }
 }
+
+function filterdropdownfunc() {
+  document.getElementById("filterDropdownContent").classList.toggle("show");
+}
+
