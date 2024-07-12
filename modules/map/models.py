@@ -26,6 +26,7 @@ class Point(models.Model):
     time_create = models.DateTimeField(auto_now_add=True, verbose_name='Время добавления')
     author = models.ForeignKey(to=User, verbose_name='Автор', on_delete=models.SET_DEFAULT, related_name='author_posts', default=1)
     fixed = models.BooleanField(verbose_name='Подтверждено', default=False)
+    favorited_by = models.ManyToManyField(User, related_name='favorite_points', blank=True)
 
     class Meta:
         db_table = 'app_points'

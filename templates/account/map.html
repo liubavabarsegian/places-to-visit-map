@@ -63,10 +63,33 @@
             `;
 
             if (point.fields.images) {
-                popupContent += `<img src="/media/${point.fields.images}" alt="${point.fields.title}" style="max-width: 200px;">`;
+                popupContent += `<img src="/media/${point.fields.images}" alt="${point.fields.title}" style="max-width: 200px;">;`
             }
 
+            popupContent += `
+                <br>
+                <button onclick="toggleFavorite(${point.pk})">Добавить в избранное</button>
+                `;
+
             marker.bindPopup(popupContent);
+        }
+
+        function toggleFavorite(pointId) {
+            fetch(`/toggle_favorite/${pointId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'added') {
+                    alert('Точка добавлена в избранное');
+                } else {
+                    alert('Точка удалена из избранного');
+                }
+            })
+            .catch(error => console.error('Error:', error));
         }
 
         points.forEach(addMarker);
