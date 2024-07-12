@@ -114,7 +114,6 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    addMarker(data.point);
                     this.reset();
                     if (tempMarker) {
                         map.removeLayer(tempMarker);
@@ -122,7 +121,7 @@
                     isAddingPoint = false;
                     document.getElementById('form-container').style.display = 'none';
                     document.getElementById('add-point-button').style.display = 'block';
-                    alert('Точка успешно добавлена!');
+                    alert(data.message);
                 } else {
                     alert('Ошибка при добавлении точки: ' + data.error);
                 }

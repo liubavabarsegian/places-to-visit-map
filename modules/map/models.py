@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator
+from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 
 
@@ -24,7 +25,7 @@ class Point(models.Model):
     )
     time_create = models.DateTimeField(auto_now_add=True, verbose_name='Время добавления')
     author = models.ForeignKey(to=User, verbose_name='Автор', on_delete=models.SET_DEFAULT, related_name='author_posts', default=1)
-    fixed = models.BooleanField(verbose_name='Зафиксировано', default=False)
+    fixed = models.BooleanField(verbose_name='Подтверждено', default=False)
 
     class Meta:
         db_table = 'app_points'

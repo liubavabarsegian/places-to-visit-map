@@ -6,10 +6,9 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 
 def points_list(request):
-    points = Point.objects.all()
+    points = Point.objects.filter(fixed=True)
     points_json = serialize('json', points)
     return render(request, 'account/map.html', {'points_json': points_json})
-
 
 @csrf_exempt
 def add_point(request):
@@ -27,15 +26,14 @@ def add_point(request):
                 latitude=latitude,
                 longitude=longitude,
                 images=image,
-                author=request.user  # Предполагаем, что пользователь аутентифицирован
+                author=request.user,
+                fixed=False  # Устанавливаем fixed в False при создании
             )
             point.save()
 
-            point_json = serialize('json', [point])
-            return JsonResponse({'success': True, 'point': json.loads(point_json)[0]})
+            return JsonResponse({'success': True, 'message': 'Точка успешно добавлена и ожидает подтверждения.'})
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)})
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
-
 
 # Create your views here.
