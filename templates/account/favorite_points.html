@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Мои избранные точки</h1>
+
+{% for point in points %}
+    <img alt="" src="/media/{{ point.images }}" style="width:322px"/>
+    <strong>{{ point.title }}</strong>
+    <p>{{ point.short_description }}</p>
+    <hr>
+{% empty %}
+    <p>У вас пока нет избранных точек.</p>
+{% endfor %}
+{% endblock %}

@@ -36,4 +36,24 @@ def add_point(request):
             return JsonResponse({'success': False, 'error': str(e)})
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
+
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def toggle_favorite(request, point_id):
+    point = Point.objects.get(id=point_id)
+    user = request.user
+    if point in user.favorite_points.all():
+        user.favorite_points.remove(point)
+        return JsonResponse({'status': 'removed'})
+    else:
+        user.favorite_points.add(point)
+        return JsonResponse({'status': 'added'})
+    
+
+@login_required
+def favorite_points(request):
+    points = request.user.favorite_points.all()
+    return render(request, 'account/favorite_points.html', {'points': points})
+
 # Create your views here.
