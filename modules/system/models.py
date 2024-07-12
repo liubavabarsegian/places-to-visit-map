@@ -5,7 +5,7 @@ from datetime import date, timedelta
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from services.utils import unique_slugify
+from modules.services.utils import unique_slugify
 
 User = get_user_model()
 

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карта точек</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+        #form-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="form-container">
+        <form id="add-point-form" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="text" id="title" name="title" placeholder="Название" required><br>
+            <textarea id="short_description" name="short_description" placeholder="Краткое описание" required></textarea><br>
+            <input type="file" id="image" name="image" accept="image/*"><br>
+            <input type="hidden" id="latitude" name="latitude">
+            <input type="hidden" id="longitude" name="longitude">
+            <button type="submit">Добавить точку</button>
+        </form>
+    </div>
+
+    <script>
+        var map = L.map('map').setView([55.7558, 37.6173], 10);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var points = {{ points_json|safe }};
+
+        function addMarker(point) {
+            var marker = L.marker([point.fields.latitude, point.fields.longitude]).addTo(map);
+            
+            var popupContent = `
+                <h3>${point.fields.title}</h3>
+                <p>${point.fields.short_description}</p>
+            `;
+
+            if (point.fields.images) {
+                popupContent += `<img src="/media/${point.fields.images}" alt="${point.fields.title}" style="max-width: 200px;">`;
+            }
+
+            marker.bindPopup(popupContent);
+        }
+
+        points.forEach(addMarker);
+
+        var tempMarker;
+
+        map.on('click', function(e) {
+            if (tempMarker) {
+                map.removeLayer(tempMarker);
+            }
+            tempMarker = L.marker(e.latlng).addTo(map);
+            document.getElementById('latitude').value = e.latlng.lat;
+            document.getElementById('longitude').value = e.latlng.lng;
+        });
+
+        document.getElementById('add-point-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+
+            fetch('/add_point/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    addMarker(data.point);
+                    this.reset();
+                    if (tempMarker) {
+                        map.removeLayer(tempMarker);
+                    }
+                    alert('Точка успешно добавлена!');
+                } else {
+                    alert('Ошибка при добавлении точки: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Произошла ошибка при отправке данных');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Заголовок страницы</title>
+</head>
+<body>
+    {% for point in points %}
+    <img alt="" src="/media/images/{{ point.images }}" style="width:322px"/>
+    <strong>{{ point.title }}</strong>
+    <p>{{ point.short_description }}</p>
+    <hr>
+    {% endfor %}
+</body>
+</html>
