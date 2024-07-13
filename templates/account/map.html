@@ -96,15 +96,18 @@
 
         var tempMarker;
         var isAddingPoint = false;
+        var isPointSelected = false;  // Новая переменная для отслеживания выбора точки
 
         document.getElementById('add-point-button').addEventListener('click', function() {
             isAddingPoint = true;
+            isPointSelected = false;  // Сбрасываем флаг при начале добавления новой точки
             document.getElementById('form-container').style.display = 'block';
             this.style.display = 'none';
         });
 
         document.getElementById('cancel-button').addEventListener('click', function() {
             isAddingPoint = false;
+            isPointSelected = false;  // Сбрасываем флаг при отмене
             document.getElementById('form-container').style.display = 'none';
             document.getElementById('add-point-button').style.display = 'block';
             if (tempMarker) {
@@ -121,10 +124,15 @@
             tempMarker = L.marker(e.latlng).addTo(map);
             document.getElementById('latitude').value = e.latlng.lat;
             document.getElementById('longitude').value = e.latlng.lng;
+            isPointSelected = true;  // Устанавливаем флаг, что точка выбрана
         });
 
         document.getElementById('add-point-form').addEventListener('submit', function(e) {
             e.preventDefault();
+            if (!isPointSelected) {
+                alert('Пожалуйста, выберите точку на карте перед сохранением.');
+                return;
+            }
             var formData = new FormData(this);
 
             fetch('/add_point/', {
@@ -142,6 +150,7 @@
                         map.removeLayer(tempMarker);
                     }
                     isAddingPoint = false;
+                    isPointSelected = false;  // Сбрасываем флаг после успешного добавления
                     document.getElementById('form-container').style.display = 'none';
                     document.getElementById('add-point-button').style.display = 'block';
                     alert(data.message);

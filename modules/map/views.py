@@ -20,6 +20,9 @@ def add_point(request):
             longitude = request.POST.get('longitude')
             image = request.FILES.get('image')
 
+            if not latitude or not longitude:
+                return JsonResponse({'success': False, 'error': 'Пожалуйста, выберите точку на карте.'})
+
             point = Point(
                 title=title,
                 short_description=short_description,
@@ -27,7 +30,7 @@ def add_point(request):
                 longitude=longitude,
                 images=image,
                 author=request.user,
-                fixed=False  # Устанавливаем fixed в False при создании
+                fixed=False
             )
             point.save()
 
