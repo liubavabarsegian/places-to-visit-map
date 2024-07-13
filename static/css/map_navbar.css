@@ -12,7 +12,7 @@ nav ul {
     height: 60px;
     width: 100%;
     position: fixed;
-    z-index: 1;
+    z-index: 1001;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
 }
@@ -52,7 +52,21 @@ nav ul {
 
 }
 
-.dropbtn:hover {
+.filter {
+    display: inline-block;
+    background:transparent url(/static/img/Lupa1.svg) no-repeat;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: inherit;
+    background-size: contain;
+    height: 100%;
+    width: 60px;
+    vertical-align: middle;
+}
+
+
+.dropbtn:hover, .filter:hover {
     background-color: #082567 ;
 }
 
@@ -146,3 +160,4 @@ nav ul {
     font-family: Arial, Helvetica, sans-serif;
     color: #f9f9f9;
 }
+

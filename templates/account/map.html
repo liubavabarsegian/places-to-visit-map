@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -5,43 +6,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Карта точек</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+    <link rel="stylesheet" href="{% static 'css/map.css'%}"/>
+    <link rel="icon" href="{% static 'img/favicon.ico'%}">
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+{% include 'nav/map_navbar.html' %}
     <style>
         #map {
-            height: 600px;
+            height: 100%;
             width: 100%;
         }
         #form-container {
             display: none;
             position: absolute;
-            top: 50px;
-            right: 10px;
+            top: 160px;
+            left: 7%;
             background: white;
             padding: 10px;
             border-radius: 5px;
             z-index: 1000;
+            animation: appear 0.4s ease-in-out;
         }
         #add-point-button {
             position: absolute;
-            top: 10px;
+            top: 80px;
             right: 10px;
             z-index: 1000;
         }
     </style>
+
 </head>
 <body>
+<div class="container">
     <div id="map"></div>
-    <button id="add-point-button">Добавить точку</button>
-    <div id="form-container">
-        <form id="add-point-form" enctype="multipart/form-data">
+    <button id="add-point-button" class="add-point-button">
+        <span>
+            Добавить точку
+        </span>
+    </button>
+    <div id="form-container" >
+        <form id="add-point-form" enctype="multipart/form-data"   class="add-point-form">
             {% csrf_token %}
             <input type="text" id="title" name="title" placeholder="Название" required><br>
             <textarea id="short_description" name="short_description" placeholder="Краткое описание" required></textarea><br>
             <input type="file" id="image" name="image" accept="image/*"><br>
             <input type="hidden" id="latitude" name="latitude">
             <input type="hidden" id="longitude" name="longitude">
-            <button type="submit">Сохранить точку</button>
-            <button type="button" id="cancel-button">Отмена</button>
+            <button type="submit" class="form-button">
+                <span>
+                Сохранить точку
+                </span>
+            </button>
+            <button type="button" id="cancel-button" class="form-cancel-button">
+                <span>
+                    Отмена
+                </span>
+            </button>
         </form>
     </div>
 
@@ -56,7 +75,6 @@
 
         function addMarker(point) {
             var marker = L.marker([point.fields.latitude, point.fields.longitude]).addTo(map);
-            
             var popupContent = `
                 <h3>${point.fields.title}</h3>
                 <p>${point.fields.short_description}</p>
@@ -68,7 +86,11 @@
 
             popupContent += `
                 <br>
-                <button onclick="toggleFavorite(${point.pk})">Добавить в избранное</button>
+                <button onclick="toggleFavorite(${point.pk})" class="favorite-button">
+                    <span>
+                        Добавить в избранное
+                    </span>
+                </button>
                 `;
 
             marker.bindPopup(popupContent);
@@ -100,7 +122,8 @@
         document.getElementById('add-point-button').addEventListener('click', function() {
             isAddingPoint = true;
             document.getElementById('form-container').style.display = 'block';
-            this.style.display = 'none';
+            this.parent.find('.form-container').fadeIn()
+
         });
 
         document.getElementById('cancel-button').addEventListener('click', function() {
@@ -114,7 +137,7 @@
 
         map.on('click', function(e) {
             if (!isAddingPoint) return;
-            
+
             if (tempMarker) {
                 map.removeLayer(tempMarker);
             }
@@ -156,4 +179,5 @@
         });
     </script>
 </body>
+</div>
 </html>
