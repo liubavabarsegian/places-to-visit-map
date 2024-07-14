@@ -2,15 +2,14 @@ html, body{
     width: 100%;
     height: 100%;
     margin: 0;
-    overflow: hidden;
     background-color: #E8E8F6;
 
 }
 
-.leaflet-popup-content, .leaflet-popup-content-wrapper {
+.leaflet-popup-content, .leaflet-popup-content-wrapper, .point-list {
     word-wrap: break-word;
     font-family: Arial, Helvetica, sans-serif;
-  background-color: #E8E8F6;
+    background-color: #E8E8F6;
 }
 
 .container {
@@ -34,6 +33,52 @@ html, body{
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
 }
+
+.header {
+    font-family: inherit;
+    font-size: 25px;
+    font-style: oblique;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.point-list {
+    margin-top: 20px;
+    padding: 20px;
+    display: block;
+    width: 100%;
+}
+
+.point-item {
+    margin-bottom: 20px;
+    display: flex;
+}
+
+.point-image {
+    max-width: 322px;
+    height: auto;
+}
+
+.point-description {
+    display: block;
+    margin: -20px 20px;
+    max-width: 300px;
+    border-right: 3px black;
+    word-wrap: break-word;
+}
+
+.focus-button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+    }
+
+.focus-button:hover {
+    background-color: #e0e0e0;
+    }
 
 .add-point-form:focus {
   color: #212529;
@@ -75,7 +120,7 @@ html, body{
 }
 
 
-.add-point-button:after, .form-button:after{
+.add-point-button:after, .form-button:after, .favorite-button:after{
   position: absolute;
   content: "";
   top: 0;
@@ -87,11 +132,11 @@ html, body{
   border-radius: 10px;
 }
 
-.add-point-button:hover, .form-button:hover{
+.add-point-button:hover, .form-button:hover, .favorite-button:hover{
   color: #fff;
 }
 
-.add-point-button:hover:after, .form-button:hover:after {
+.add-point-button:hover:after, .form-button:hover:after, .favorite-button:hover:after, .form-button:hover:after {
   width: 100%;
 }
 
@@ -148,6 +193,17 @@ html, body{
   border-radius: 10px;
 }
 
+.scrollToFooterButton {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    z-index: 1000;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+        }
+
 .form-cancel-button:hover{
   color: #fff;
 }
@@ -158,7 +214,22 @@ html, body{
 
 
 .favorite-button {
-
+  display: block;
+  width: 250px;
+  height: 40px;
+  left: 10px;
+  line-height: 40px;
+  font-size: 18px;
+  font-family: sans-serif;
+  text-decoration: none;
+  color: #333;
+  border: 2px solid #333;
+  letter-spacing: 2px;
+  text-align: center;
+  position: relative;
+  transition: all .35s;
+  border-radius: 10px;
+  cursor: pointer;
 }
 
 @keyframes appear {
@@ -166,6 +237,51 @@ html, body{
   100% {opacity: 1;}
 }
 
-.leaflet-marker-icon::selection{
-  background-color: red;
+.leaflet-popup-content {
+    min-width: 250px;
+}
+
+label {
+    margin-top: 10px;
+ width: 40px;
+ height: 40px;
+ display: block;
+ position: relative;
+}
+
+.favorite-checkbox-text { /* подпись к чекбоксу */
+    font-size: 19px;
+    font-family: Arial, Helvetica, sans-serif;
+    display: block;
+    width: 200px;
+    margin-left: 130%;
+    margin-top: -50%;
+}
+
+input[type="checkbox"] + span {
+ position: absolute;
+ left: 0; top: 0;
+ width: 100%; height: 100%;
+ background: url(/static/img/Heart.svg) no-repeat;
+ cursor: pointer;
+ filter: invert(52%) sepia(0%) saturate(0%) hue-rotate(169deg) brightness(99%) contrast(84%);
+ transition: all 0.3s;
+}
+
+
+input[type="checkbox"]:checked + span  	{   /* чекбокс анимация при выборе */
+    filter: invert(45%) sepia(46%) saturate(3027%) hue-rotate(325deg) brightness(98%) contrast(108%);
+    transform: scale(1.5);
+    transition: all 0.3s;
+}
+
+input[type="checkbox"]:hover + span 	{   /* чекбокс анимация при наведении */
+    filter: invert(76%) sepia(45%) saturate(299%) hue-rotate(304deg) brightness(100%) contrast(105%);
+    transition: all 0.3s;
+    transform: scale(1.2);
+}
+
+
+input[type="checkbox"]:checked + span:before { /* чекбокс анимация при нажатии */
+    animation: tick .2s ease-in-out;
 }

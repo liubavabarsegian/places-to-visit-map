@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'modules.system.apps.SystemConfig',
     'modules.map.apps.MapConfig',
     'modules.services',
+    'mptt',
 ]
 
 SITE_ID = 1

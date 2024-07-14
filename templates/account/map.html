@@ -1,4 +1,5 @@
 {% load static %}
+{% load mptt_tags %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -43,6 +44,7 @@
             Добавить точку
         </span>
     </button>
+    <button id="scrollToFooterButton" class="scrollToFooterButton">К списку всех точек</button>
     <div id="form-container" >
         <form id="add-point-form" enctype="multipart/form-data"   class="add-point-form">
             {% csrf_token %}
@@ -63,6 +65,36 @@
             </button>
         </form>
     </div>
+</div>
+    <footer class="point-list">
+    <br><br>
+        <span class="header">Список точек на карте</span>
+    <hr>
+        {% for point in points %}
+            <div id="point-{{ point.id }}" class="point-item" data-id="{{ point.id }}">
+                {% if point.images %}
+                    <img class="point-image" alt="{{ point.title }}" src="/media/{{ point.images }}" style="width:322px"/>
+                {% endif %}
+                <div class="point-description">
+                    <h3>{{ point.title }}</h3>
+                    <p>{{ point.short_description }}</p>
+                </div>
+            </div>
+                <button class="focus-button" data-id="{{ point.id }}">Показать на карте</button>
+                <div class="card border-0">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Комментарии
+                        </h5>
+                        {% include 'comments/comments_list.html' with point=point %}
+                    </div>
+                </div>
+                <hr>
+
+        {% empty %}
+            <p>На карте пока нет точек.</p>
+        {% endfor %}
+    </footer>
 
     <script>
         let map = L.map('map').setView([55.7558, 37.6173], 10);
@@ -71,64 +103,85 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        var points = {{ points_json|safe }};
+        let points = {{ points_json|safe }};
+        let markers = {};
 
         function addMarker(point) {
-            var marker = L.marker([point.fields.latitude, point.fields.longitude]).addTo(map);
-            var popupContent = `
+            let marker = L.marker([point.fields.latitude, point.fields.longitude]).addTo(map);
+
+            let popupContent = `
                 <h3>${point.fields.title}</h3>
                 <p>${point.fields.short_description}</p>
             `;
 
             if (point.fields.images) {
-                popupContent += `<img src="/media/${point.fields.images}" alt="${point.fields.title}" style="max-width: 200px;">`
+                popupContent += `<img src="/media/${point.fields.images}" alt="${point.fields.title}" style="max-width: 200px;">`;
             }
 
             popupContent += `
                 <br>
-                <button onclick="toggleFavorite(${point.pk})" class="favorite-button">
-                    <span>
-                        Добавить в избранное
-                    </span>
-                </button>
+<label><input type="checkbox" id="favorite-checkbox" name="favorite_checkbox" class="favorite-checkbox" onclick="toggleFavorite(${point.pk})">
+<span></span><span class="favorite-checkbox-text">Добавить в избранное<span></label>
                 `;
 
             marker.bindPopup(popupContent);
+
+            // Сохраняем маркер в объект, используя ID точки как ключ
+            markers[point.pk] = marker;
         }
 
+        points.forEach(addMarker);
+
+        // Функция для фокусировки на маркере
+        function focusOnMarker(pointId) {
+            let marker = markers[pointId];
+            if (marker) {
+                let latLng = marker.getLatLng();
+                map.setView(latLng, 15); // 15 - это уровень зума, можете изменить по вашему усмотрению
+                marker.openPopup();
+            }
+        }
+
+        // Добавляем обработчик событий для кнопок фокусировки
+        document.querySelectorAll('.focus-button').forEach(button => {
+            button.addEventListener('click', function() {
+                let pointId = parseInt(this.getAttribute('data-id'));
+                focusOnMarker(pointId);
+            });
+        });
         function toggleFavorite(pointId) {
             fetch(`/toggle_favorite/${pointId}/`, {
                 method: 'POST',
                 headers: {
                     'X-CSRFToken': '{{ csrf_token }}'
                 }
-
             })
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'added') {
-                    alert('Точка добавлена в избранное');
 
                 } else {
-                    alert('Точка удалена из избранного');
+
                 }
             })
             .catch(error => console.error('Error:', error));
         }
+
         points.forEach(addMarker);
 
-        var tempMarker;
-        var isAddingPoint = false;
+        let tempMarker;
+        let isAddingPoint = false;
+        let isPointSelected = false;  // Новая переменная для отслеживания выбора точки
 
         document.getElementById('add-point-button').addEventListener('click', function() {
             isAddingPoint = true;
+            isPointSelected = false;  // Сбрасываем флаг при начале добавления новой точки
             document.getElementById('form-container').style.display = 'block';
-            this.parent.find('.form-container').fadeIn()
-
         });
 
         document.getElementById('cancel-button').addEventListener('click', function() {
             isAddingPoint = false;
+            isPointSelected = false;  // Сбрасываем флаг при отмене
             document.getElementById('form-container').style.display = 'none';
             document.getElementById('add-point-button').style.display = 'block';
             if (tempMarker) {
@@ -145,11 +198,16 @@
             tempMarker = L.marker(e.latlng).addTo(map);
             document.getElementById('latitude').value = e.latlng.lat;
             document.getElementById('longitude').value = e.latlng.lng;
+            isPointSelected = true;  // Устанавливаем флаг, что точка выбрана
         });
 
         document.getElementById('add-point-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            var formData = new FormData(this);
+            if (!isPointSelected) {
+                alert('Пожалуйста, выберите точку на карте перед сохранением.');
+                return;
+            }
+            let formData = new FormData(this);
 
             fetch('/add_point/', {
                 method: 'POST',
@@ -166,6 +224,7 @@
                         map.removeLayer(tempMarker);
                     }
                     isAddingPoint = false;
+                    isPointSelected = false;  // Сбрасываем флаг после успешного добавления
                     document.getElementById('form-container').style.display = 'none';
                     document.getElementById('add-point-button').style.display = 'block';
                     alert(data.message);
@@ -178,7 +237,54 @@
                 alert('Произошла ошибка при отправке данных');
             });
         });
-    </script>
+        function smoothScrollToTop() {
+            const scrollToTop = () => {
+                const c = document.documentElement.scrollTop || document.body.scrollTop;
+                if (c > 0) {
+                    window.requestAnimationFrame(scrollToTop);
+                    window.scrollTo(0, c - c / 8);
+                }
+            };
+            scrollToTop();
+        }
+
+        // Добавляем обработчик событий для кнопок прокрутки наверх
+        document.querySelectorAll('.focus-button').forEach(button => {
+            button.addEventListener('click', smoothScrollToTop);
+        });
+
+function smoothScrollTo(element, duration) {
+    let targetPosition = element.offsetTop;
+    let startPosition = window.pageYOffset;
+    let distance = targetPosition - startPosition;
+    let startTime = null;
+
+    function animation(currentTime) {
+        if (startTime === null) startTime = currentTime;
+        let timeElapsed = currentTime - startTime;
+        let run = ease(timeElapsed, startPosition, distance, duration);
+        window.scrollTo(0, run);
+        if (timeElapsed < duration) requestAnimationFrame(animation);
+    }
+
+    // Функция плавности изменения скорости
+    function ease(t, b, c, d) {
+        t /= d / 2;
+        if (t < 1) return c / 2 * t * t + b;
+        t--;
+        return -c / 2 * (t * (t - 2) - 1) + b;
+    }
+
+    requestAnimationFrame(animation);
+}
+
+document.getElementById('scrollToFooterButton').addEventListener('click', function() {
+    let footer = document.querySelector('footer');
+    smoothScrollTo(footer, 1000); // Продолжительность анимации (в миллисекундах)
+});
+
+        </script>
+        <script src="{% static 'custom/js/backend.js' %}"></script>
+        {% block script %}{% endblock %}
 </body>
-</div>
 </html>
