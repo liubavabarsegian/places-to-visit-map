@@ -1,14 +1,31 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+    <link rel="stylesheet" href="{% static 'css/favorite_points.css'%}" type="text/css">
+    <link rel="icon" href="{% static 'img/favicon.ico'%}" type="image/x-icon">
 
+</head>
+        {% include 'nav/navbar.html' %}
+        <div class="blankspace"></div>
+<body>
 {% block content %}
-<h1>Мои избранные точки</h1>
-
-{% for point in points %}
-    <img alt="" src="/media/{{ point.images }}" style="width:322px"/>
-    <strong>{{ point.title }}</strong>
-    <p>{{ point.short_description }}</p>
+        <div class="container">
+    <span class="header">Список ваших избранных точек</span>
     <hr>
+{% for point in points %}
+    <div class="content">
+        <img alt="" src="/media/{{ point.images }}" style="width:322px"/>
+    <div class="point-description">
+        <h3>{{ point.title }}</h3>
+        <p>{{ point.short_description }}</p>
+    </div>
+    </div>
+        <hr>
 {% empty %}
     <p>У вас пока нет избранных точек.</p>
 {% endfor %}
 {% endblock %}
+</div>
+</body>

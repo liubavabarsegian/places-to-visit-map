@@ -4,6 +4,13 @@ html, body{
     margin: 0;
     overflow: hidden;
     background-color: #E8E8F6;
+
+}
+
+.leaflet-popup-content, .leaflet-popup-content-wrapper {
+    word-wrap: break-word;
+    font-family: Arial, Helvetica, sans-serif;
+  background-color: #E8E8F6;
 }
 
 .container {
@@ -157,4 +164,8 @@ html, body{
 @keyframes appear {
   0% {opacity: 0;}
   100% {opacity: 1;}
+}
+
+.leaflet-marker-icon::selection{
+  background-color: red;
 }

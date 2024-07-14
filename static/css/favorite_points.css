@@ -1,0 +1,36 @@
+body{
+    margin: 0;
+    background-color: #E8E8F6;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.blankspace {
+    height: 70px;
+    background-color: inherit;
+}
+
+.header {
+    font-family: inherit;
+    font-size: 25px;
+    font-style: oblique;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.container {
+    display: block;
+    margin-left: 15px;
+}
+
+.content {
+    display: flex;
+}
+
+.point-description {
+    display: block;
+    margin: -20px 20px;
+    max-width: 300px;
+    border-right: 3px black;
+    word-wrap: break-word;
+}
+
