@@ -8,7 +8,7 @@ import json
 def points_list(request):
     points = Point.objects.filter(fixed=True)
     points_json = serialize('json', points)
-    return render(request, 'account/map.html', {'points_json': points_json})
+    return render(request, 'account/map.html', {'points_json': points_json, 'points': points})
 
 @csrf_exempt
 def add_point(request):

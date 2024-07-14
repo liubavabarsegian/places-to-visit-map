@@ -27,6 +27,21 @@
             right: 10px;
             z-index: 1000;
         }
+        .point-list { margin-top: 20px; padding: 20px; }
+        .point-item { margin-bottom: 20px; }
+        .point-image { max-width: 322px; height: auto; }
+        .focus-button {
+            margin-left: 10px;
+            padding: 5px 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .focus-button:hover {
+            background-color: #e0e0e0;
+        }
     </style>
 </head>
 <body>
@@ -44,6 +59,22 @@
             <button type="button" id="cancel-button">Отмена</button>
         </form>
     </div>
+    <div class="point-list">
+        <h2>Список точек на карте</h2>
+        {% for point in points %}
+            <div class="point-item" data-id="{{ point.id }}">
+                {% if point.images %}
+                    <img class="point-image" alt="{{ point.title }}" src="/media/{{ point.images }}"/>
+                {% endif %}
+                <h3>{{ point.title }}</h3>
+                <p>{{ point.short_description }}</p>
+                <button class="focus-button" data-id="{{ point.id }}">Показать на карте</button>
+                <hr>
+            </div>
+        {% empty %}
+            <p>На карте пока нет точек.</p>
+        {% endfor %}
+    </div>
 
     <script>
         var map = L.map('map').setView([55.7558, 37.6173], 10);
@@ -53,6 +84,7 @@
         }).addTo(map);
 
         var points = {{ points_json|safe }};
+        var markers = {};
 
         function addMarker(point) {
             var marker = L.marker([point.fields.latitude, point.fields.longitude]).addTo(map);
@@ -63,17 +95,39 @@
             `;
 
             if (point.fields.images) {
-                popupContent += `<img src="/media/${point.fields.images}" alt="${point.fields.title}" style="max-width: 200px;">;`
+                popupContent += `<img src="/media/${point.fields.images}" alt="${point.fields.title}" style="max-width: 200px;">`;
             }
 
             popupContent += `
                 <br>
                 <button onclick="toggleFavorite(${point.pk})">Добавить в избранное</button>
-                `;
+            `;
 
             marker.bindPopup(popupContent);
+            
+            // Сохраняем маркер в объект, используя ID точки как ключ
+            markers[point.pk] = marker;
         }
 
+        points.forEach(addMarker);
+
+        // Функция для фокусировки на маркере
+        function focusOnMarker(pointId) {
+            var marker = markers[pointId];
+            if (marker) {
+                var latLng = marker.getLatLng();
+                map.setView(latLng, 15); // 15 - это уровень зума, можете изменить по вашему усмотрению
+                marker.openPopup();
+            }
+        }
+
+        // Добавляем обработчик событий для кнопок фокусировки
+        document.querySelectorAll('.focus-button').forEach(button => {
+            button.addEventListener('click', function() {
+                var pointId = parseInt(this.getAttribute('data-id'));
+                focusOnMarker(pointId);
+            });
+        });
         function toggleFavorite(pointId) {
             fetch(`/toggle_favorite/${pointId}/`, {
                 method: 'POST',
@@ -162,6 +216,21 @@
                 console.error('Error:', error);
                 alert('Произошла ошибка при отправке данных');
             });
+        });
+        function smoothScrollToTop() {
+            const scrollToTop = () => {
+                const c = document.documentElement.scrollTop || document.body.scrollTop;
+                if (c > 0) {
+                    window.requestAnimationFrame(scrollToTop);
+                    window.scrollTo(0, c - c / 8);
+                }
+            };
+            scrollToTop();
+        }
+
+        // Добавляем обработчик событий для кнопок прокрутки наверх
+        document.querySelectorAll('.focus-button').forEach(button => {
+            button.addEventListener('click', smoothScrollToTop);
         });
     </script>
 </body>
