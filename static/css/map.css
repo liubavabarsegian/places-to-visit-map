@@ -6,7 +6,7 @@ html, body{
 
 }
 
-.leaflet-popup-content, .leaflet-popup-content-wrapper {
+.leaflet-popup-content, .leaflet-popup-content-wrapper, .point-list {
     word-wrap: break-word;
     font-family: Arial, Helvetica, sans-serif;
     background-color: #E8E8F6;
@@ -34,11 +34,38 @@ html, body{
 
 }
 
-.point-list { margin-top: 20px; padding: 20px; }
+.header {
+    font-family: inherit;
+    font-size: 25px;
+    font-style: oblique;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
 
-.point-item { margin-bottom: 20px; }
+.point-list {
+    margin-top: 20px;
+    padding: 20px;
+    display: block;
+    width: 100%;
+}
 
-.point-image { max-width: 322px; height: auto; }
+.point-item {
+    margin-bottom: 20px;
+    display: flex;
+}
+
+.point-image {
+    max-width: 322px;
+    height: auto;
+}
+
+.point-description {
+    display: block;
+    margin: -20px 20px;
+    max-width: 300px;
+    border-right: 3px black;
+    word-wrap: break-word;
+}
 
 .focus-button {
     margin-left: 10px;
@@ -166,6 +193,17 @@ html, body{
   border-radius: 10px;
 }
 
+.scrollToFooterButton {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    z-index: 1000;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+        }
+
 .form-cancel-button:hover{
   color: #fff;
 }
@@ -187,3 +225,5 @@ html, body{
 .leaflet-marker-icon::selection{
   background-color: red;
 }
+
+

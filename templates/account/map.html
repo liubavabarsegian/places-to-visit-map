@@ -43,7 +43,7 @@
             Добавить точку
         </span>
     </button>
-    <button id="scrollToFooterButton">Прокрутить к футеру</button>
+    <button id="scrollToFooterButton" class="scrollToFooterButton">К списку всех точек</button>
     <div id="form-container" >
         <form id="add-point-form" enctype="multipart/form-data"   class="add-point-form">
             {% csrf_token %}
@@ -66,17 +66,22 @@
     </div>
 </div>
     <footer class="point-list">
-        <h2>Список точек на карте</h2>
+    <br><br>
+        <span class="header">Список точек на карте</span>
+    <hr>
         {% for point in points %}
             <div class="point-item" data-id="{{ point.id }}">
                 {% if point.images %}
-                    <img class="point-image" alt="{{ point.title }}" src="/media/{{ point.images }}"/>
+                    <img class="point-image" alt="{{ point.title }}" src="/media/{{ point.images }}" style="width:322px"/>
                 {% endif %}
-                <h3>{{ point.title }}</h3>
-                <p>{{ point.short_description }}</p>
+                <div class="point-description">
+                    <h3>{{ point.title }}</h3>
+                    <p>{{ point.short_description }}</p>
+                </div>
+            </div>
                 <button class="focus-button" data-id="{{ point.id }}">Показать на карте</button>
                 <hr>
-            </div>
+
         {% empty %}
             <p>На карте пока нет точек.</p>
         {% endfor %}
