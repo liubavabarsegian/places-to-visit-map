@@ -88,19 +88,19 @@
     </footer>
 
     <script>
-        var map = L.map('map').setView([55.7558, 37.6173], 10);
+        let map = L.map('map').setView([55.7558, 37.6173], 10);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        var points = {{ points_json|safe }};
-        var markers = {};
+        let points = {{ points_json|safe }};
+        let markers = {};
 
         function addMarker(point) {
-            var marker = L.marker([point.fields.latitude, point.fields.longitude]).addTo(map);
+            let marker = L.marker([point.fields.latitude, point.fields.longitude]).addTo(map);
 
-            var popupContent = `
+            let popupContent = `
                 <h3>${point.fields.title}</h3>
                 <p>${point.fields.short_description}</p>
             `;
@@ -111,8 +111,9 @@
 
             popupContent += `
                 <br>
-                <button onclick="toggleFavorite(${point.pk})">Добавить в избранное</button>
-            `;
+<label><input type="checkbox" id="favorite-checkbox" name="favorite_checkbox" class="favorite-checkbox" onclick="toggleFavorite(${point.pk})">
+<span></span><span class="favorite-checkbox-text">Добавить в избранное<span></label>
+                `;
 
             marker.bindPopup(popupContent);
 
@@ -124,9 +125,9 @@
 
         // Функция для фокусировки на маркере
         function focusOnMarker(pointId) {
-            var marker = markers[pointId];
+            let marker = markers[pointId];
             if (marker) {
-                var latLng = marker.getLatLng();
+                let latLng = marker.getLatLng();
                 map.setView(latLng, 15); // 15 - это уровень зума, можете изменить по вашему усмотрению
                 marker.openPopup();
             }
@@ -135,7 +136,7 @@
         // Добавляем обработчик событий для кнопок фокусировки
         document.querySelectorAll('.focus-button').forEach(button => {
             button.addEventListener('click', function() {
-                var pointId = parseInt(this.getAttribute('data-id'));
+                let pointId = parseInt(this.getAttribute('data-id'));
                 focusOnMarker(pointId);
             });
         });
@@ -149,9 +150,9 @@
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'added') {
-                    alert('Точка добавлена в избранное');
+
                 } else {
-                    alert('Точка удалена из избранного');
+
                 }
             })
             .catch(error => console.error('Error:', error));
@@ -159,15 +160,14 @@
 
         points.forEach(addMarker);
 
-        var tempMarker;
-        var isAddingPoint = false;
-        var isPointSelected = false;  // Новая переменная для отслеживания выбора точки
+        let tempMarker;
+        let isAddingPoint = false;
+        let isPointSelected = false;  // Новая переменная для отслеживания выбора точки
 
         document.getElementById('add-point-button').addEventListener('click', function() {
             isAddingPoint = true;
             isPointSelected = false;  // Сбрасываем флаг при начале добавления новой точки
             document.getElementById('form-container').style.display = 'block';
-            this.style.display = 'none';
         });
 
         document.getElementById('cancel-button').addEventListener('click', function() {
@@ -198,7 +198,7 @@
                 alert('Пожалуйста, выберите точку на карте перед сохранением.');
                 return;
             }
-            var formData = new FormData(this);
+            let formData = new FormData(this);
 
             fetch('/add_point/', {
                 method: 'POST',
@@ -245,15 +245,15 @@
         });
 
 function smoothScrollTo(element, duration) {
-    var targetPosition = element.offsetTop;
-    var startPosition = window.pageYOffset;
-    var distance = targetPosition - startPosition;
-    var startTime = null;
+    let targetPosition = element.offsetTop;
+    let startPosition = window.pageYOffset;
+    let distance = targetPosition - startPosition;
+    let startTime = null;
 
     function animation(currentTime) {
         if (startTime === null) startTime = currentTime;
-        var timeElapsed = currentTime - startTime;
-        var run = ease(timeElapsed, startPosition, distance, duration);
+        let timeElapsed = currentTime - startTime;
+        let run = ease(timeElapsed, startPosition, distance, duration);
         window.scrollTo(0, run);
         if (timeElapsed < duration) requestAnimationFrame(animation);
     }
@@ -270,9 +270,10 @@ function smoothScrollTo(element, duration) {
 }
 
 document.getElementById('scrollToFooterButton').addEventListener('click', function() {
-    var footer = document.querySelector('footer');
+    let footer = document.querySelector('footer');
     smoothScrollTo(footer, 1000); // Продолжительность анимации (в миллисекундах)
 });
+
         </script>
 </body>
 </html>
