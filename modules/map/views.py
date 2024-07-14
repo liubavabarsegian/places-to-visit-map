@@ -5,10 +5,12 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 
+
 def points_list(request):
     points = Point.objects.filter(fixed=True)
     points_json = serialize('json', points)
     return render(request, 'account/map.html', {'points_json': points_json, 'points': points})
+
 
 @csrf_exempt
 def add_point(request):
@@ -42,6 +44,7 @@ def add_point(request):
 
 from django.contrib.auth.decorators import login_required
 
+
 @login_required
 def toggle_favorite(request, point_id):
     point = Point.objects.get(id=point_id)
@@ -52,7 +55,7 @@ def toggle_favorite(request, point_id):
     else:
         user.favorite_points.add(point)
         return JsonResponse({'status': 'added'})
-    
+
 
 @login_required
 def favorite_points(request):
