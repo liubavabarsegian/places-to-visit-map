@@ -4,10 +4,13 @@ from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db import transaction
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
+
 from .models import Profile
 from .forms import UserUpdateForm, ProfileUpdateForm
 
-class ProfileDetailView(DetailView):
+class ProfileDetailView(LoginRequiredMixin, DetailView):
     """
     Представление для просмотра профиля
     """
@@ -16,13 +19,18 @@ class ProfileDetailView(DetailView):
     template_name = 'system/profile_detail.html'
     queryset = model.objects.all().select_related('user')
 
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if obj.user != self.request.user:
+            raise PermissionDenied("У вас нет доступа к этому профилю.")
+        return obj
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = f'Страница пользователя: {self.object.user.username}'
         return context
 
-
-class ProfileUpdateView(UpdateView):
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     """
     Представление для редактирования профиля 
     """

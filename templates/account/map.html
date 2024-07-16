@@ -80,17 +80,16 @@
                     <p>{{ point.short_description }}</p>
                 </div>
             </div>
-                <button class="focus-button" data-id="{{ point.id }}">Показать на карте</button>
-                <div class="card border-0">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            Комментарии
-                        </h5>
-                        {% include 'comments/comments_list.html' with point=point %}
-                    </div>
+            <button class="focus-button" data-id="{{ point.id }}">Показать на карте</button>
+            <div class="card border-0">
+                <div class="card-body">
+                    <button class="show-all-comments" data-point-id="{{ point.id }}">Комментарии</button>
                 </div>
-                <hr>
-
+            </div>
+            <div id="all-comments-{{ point.id }}" class="all-comments" style="display: none;">
+                {% include 'comments/comments_list.html' with point=point %}
+            </div>
+            <hr>
         {% empty %}
             <p>На карте пока нет точек.</p>
         {% endfor %}
@@ -120,9 +119,12 @@
 
             popupContent += `
                 <br>
-<label><input type="checkbox" id="favorite-checkbox" name="favorite_checkbox" class="favorite-checkbox" onclick="toggleFavorite(${point.pk})">
-<span></span><span class="favorite-checkbox-text">Добавить в избранное<span></label>
-                `;
+                <label>
+                    <input type="checkbox" id="favorite-checkbox" name="favorite_checkbox" class="favorite-checkbox" onclick="toggleFavorite(${point.pk})">
+                    <span></span>
+                    <span class="favorite-checkbox-text">Добавить в избранное<span>
+                </label>
+            `;
 
             marker.bindPopup(popupContent);
 
@@ -253,35 +255,54 @@
             button.addEventListener('click', smoothScrollToTop);
         });
 
-function smoothScrollTo(element, duration) {
-    let targetPosition = element.offsetTop;
-    let startPosition = window.pageYOffset;
-    let distance = targetPosition - startPosition;
-    let startTime = null;
+        function smoothScrollTo(element, duration) {
+            let targetPosition = element.offsetTop;
+            let startPosition = window.pageYOffset;
+            let distance = targetPosition - startPosition;
+            let startTime = null;
 
-    function animation(currentTime) {
-        if (startTime === null) startTime = currentTime;
-        let timeElapsed = currentTime - startTime;
-        let run = ease(timeElapsed, startPosition, distance, duration);
-        window.scrollTo(0, run);
-        if (timeElapsed < duration) requestAnimationFrame(animation);
-    }
+        function animation(currentTime) {
+            if (startTime === null) startTime = currentTime;
+            let timeElapsed = currentTime - startTime;
+            let run = ease(timeElapsed, startPosition, distance, duration);
+            window.scrollTo(0, run);
+            if (timeElapsed < duration) requestAnimationFrame(animation);
+        }
 
-    // Функция плавности изменения скорости
-    function ease(t, b, c, d) {
-        t /= d / 2;
-        if (t < 1) return c / 2 * t * t + b;
-        t--;
-        return -c / 2 * (t * (t - 2) - 1) + b;
-    }
+        // Функция плавности изменения скорости
+        function ease(t, b, c, d) {
+            t /= d / 2;
+            if (t < 1) return c / 2 * t * t + b;
+            t--;
+            return -c / 2 * (t * (t - 2) - 1) + b;
+        }
 
-    requestAnimationFrame(animation);
-}
+        requestAnimationFrame(animation);
+        }
 
-document.getElementById('scrollToFooterButton').addEventListener('click', function() {
-    let footer = document.querySelector('footer');
-    smoothScrollTo(footer, 1000); // Продолжительность анимации (в миллисекундах)
-});
+        document.getElementById('scrollToFooterButton').addEventListener('click', function() {
+            let footer = document.querySelector('footer');
+            smoothScrollTo(footer, 1000); // Продолжительность анимации (в миллисекундах)
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const showAllCommentsButtons = document.querySelectorAll('.show-all-comments');
+            
+            showAllCommentsButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const pointId = this.getAttribute('data-point-id');
+                    const allCommentsDiv = document.getElementById(`all-comments-${pointId}`);
+                    
+                    if (allCommentsDiv.style.display === 'none') {
+                        allCommentsDiv.style.display = 'block';
+                        this.textContent = 'Скрыть';
+                    } else {
+                        allCommentsDiv.style.display = 'none';
+                        this.textContent = 'Подробнее';
+                    }
+                });
+            });
+        });
 
         </script>
         <script src="{% static 'custom/js/backend.js' %}"></script>
