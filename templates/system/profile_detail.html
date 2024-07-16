@@ -10,7 +10,11 @@
 
     <div class="profile-container">
         <h2 class="card-title">
-            Добро пожаловать на борт, {{ profile }}!
+             {% if request.user.is_authenticated and request.user == profile.user %}
+        Добро пожаловать на борт, {{ profile }}!
+    {% else %}
+        Это аккаунт пользователя {{ profile.user.username }}
+    {% endif %}
         </h2>
         <ul class="profile-list">
             <li>
@@ -44,10 +48,12 @@
                     {{ profile.bio }}
             </li>
         </ul>
+        {% if request.user.is_authenticated and request.user == profile.user %}
         <a href="{% url 'profile_edit' %}" class="redact_button" >
             <span>
                 Редактировать профиль
             </span>
         </a>
+    {% endif %}
     </div>
 {% endblock %}

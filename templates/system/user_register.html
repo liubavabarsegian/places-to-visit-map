@@ -4,7 +4,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/user_register.css'%}" type="text/css">
     <link rel="icon" href="{% static 'img/favicon.ico'%}">
-    <script src async="{% static 'js/user_register_rocket.js' %}"></script>
+
 
 {% include 'nav/navbar.html' %}
 
@@ -12,7 +12,7 @@
 
 <span class="title">Регистрация на сайте</span>
     <div class="planet"></div>
-<!--    <div id ="rocket" class="rocket"></div> -->
+
     <div class="container">
         <form method="post" action="{% url 'register' %}" enctype="multipart/form-data" class="form">
             {% csrf_token %}
@@ -20,4 +20,6 @@
             <button type="submit" class="reg_button"><span>Поехали!</span></button>
         </form>
     </div>
+    <div id ="rocket" class="rocket"></div>
+        <script src="{% static 'js/user_register_rocket.js' %}"></script>
 {% endblock %}

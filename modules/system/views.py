@@ -19,12 +19,6 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
     template_name = 'system/profile_detail.html'
     queryset = model.objects.all().select_related('user')
 
-    def get_object(self, queryset=None):
-        obj = super().get_object(queryset)
-        if obj.user != self.request.user:
-            raise PermissionDenied("У вас нет доступа к этому профилю.")
-        return obj
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = f'Страница пользователя: {self.object.user.username}'

@@ -4,6 +4,7 @@ body {
   margin: 0;
   height: 100%;
   width: auto;
+  overflow: hidden;
 }
 
 .gcontainer {
@@ -24,8 +25,9 @@ body {
   width: 50%;
   border: 1px solid black;
   border-radius: 10px;
-  margin-top: 4%;
+  margin-top: 3%;
   margin-left: 25%;
+  z-index: 2;
 }
 
 .form {
@@ -42,6 +44,7 @@ body {
   background-clip: padding-box;
   border: 1px solid #bdbdbd;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  z-index: 2;
 }
 
 .form:focus {
@@ -109,15 +112,22 @@ body {
 
 .rocket
 {
-  display: block;
-  height: 500px;
+
+  display: flex;
+  height: 850px;
+  width: 600px;
+  transform: scale(0.5);
   background-image: url("../img/rocket.png");
   background-repeat: no-repeat;
   position: relative;
   margin: 0;
+  left: 20%;
+  top: -800px;
+  offset-path: path('M1005.5 585C999 305 781.5 94 723 79C705.443 74.4982 592 1 430.5 96.5C363.5 136.119 329 381.5 231 375C154.251 369.91 -13.5 2.5 2.00001 1');
+  offset-rotate: auto 90deg;
+  cursor: pointer;
+  z-index: 0;
 
-  /*offset-path: path('M1005.5 585C999 305 781.5 94 723 79C705.443 74.4982 592 1 430.5 96.5C363.5 136.119 329 381.5 231 375C154.251 369.91 -13.5 2.5 2.00001 1');*/
-  /*offset-rotate: auto 90deg; */
 }
 
 .animateShake
@@ -128,14 +138,18 @@ body {
 .animate
 {
   animation-delay:3s;
-  animation: rocket_takeoff 3s ease-in;
+  animation: rocket_takeoff 3s ease-in forwards;
 }
 
 @keyframes rocket_takeoff
 {
+  50%{
+    transform: scale(0.4);
+  }
   100%
   {
     offset-distance: 100%;
+    transform: scale(0.1);
   }
 }
 
@@ -143,10 +157,10 @@ body {
 {
   0%, 100%
   {
-    transform: translateX(-2px);
+    transform: scale(0.5) translateX(-2px);
   }
   50%
   {
-    transform: translateX(2px);
+    transform: scale(0.5) translateX(2px);
   }
 }

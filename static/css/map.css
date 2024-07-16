@@ -12,6 +12,23 @@ html, body{
     background-color: #E8E8F6;
 }
 
+.leaflet-popup-content h3{
+    font-size: 25px;
+    margin: 10px 0 10px 0;
+}
+
+.leaflet-popup-content p{
+    font-size: 16px;
+    margin: 10px 0 10px 0;
+}
+
+.leaflet-popup-content img{
+    width: 100%;
+}
+
+.pop-up-title {
+    font-size: 30px;
+}
 .container {
     height: 100%;
     display: flex;
@@ -50,8 +67,22 @@ html, body{
 }
 
 .point-item {
-    margin-bottom: 20px;
     display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.point-description {
+    width: 60%;
+}
+
+.show-all-comments {
+
+}
+
+.comments-section {
+    width: 30%;
+        justify-content: space-between;
 }
 
 .point-image {
@@ -67,16 +98,17 @@ html, body{
     word-wrap: break-word;
 }
 
-.focus-button {
+.focus-button, .show-all-comments, .btn {
     margin-left: 10px;
     padding: 5px 10px;
     background-color: #f0f0f0;
     border: 1px solid #ccc;
     border-radius: 3px;
     cursor: pointer;
+    text-decoration: none;
     }
 
-.focus-button:hover {
+.focus-button:hover, .show-all-comments:hover, .btn:hover {
     background-color: #e0e0e0;
     }
 
@@ -114,7 +146,7 @@ html, body{
   cursor: pointer;
 }
 
-.add-point-button span, .form-button span, .form-cancel-button span, .favorite-button span{
+.add-point-button span, .form-button span, .form-cancel-button span, .favorite-button span, .scrollToFooterButton span{
   position: relative;
   z-index: 2;
 }
@@ -132,11 +164,11 @@ html, body{
   border-radius: 10px;
 }
 
-.add-point-button:hover, .form-button:hover, .favorite-button:hover{
+.add-point-button:hover, .form-button:hover, .favorite-button:hover, .scrollToFooterButton:hover{
   color: #fff;
 }
 
-.add-point-button:hover:after, .form-button:hover:after, .favorite-button:hover:after, .form-button:hover:after {
+.add-point-button:hover:after, .form-button:hover:after, .favorite-button:hover:after, .form-button:hover:after, .scrollToFooterButton:hover:after {
   width: 100%;
 }
 
@@ -195,14 +227,33 @@ html, body{
 
 .scrollToFooterButton {
     position: fixed;
-    bottom: 10px;
-    left: 10px;
+    bottom: 20px;
+    right: 20px;
     z-index: 1000;
-    background-color: transparent;
     border: none;
     cursor: pointer;
     outline: none;
-        }
+    background-color: cornflowerblue;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+     /* Adjust the size as needed */
+    line-height: 20px;
+}
+
+.scrollToFooterButton span {
+    padding-bottom: 10px;
+    font-size: 48px;
+}
+
+.show-all-comments {
+    display: flex;
+    position: relative;
+}
+
+.comment-section {
+    display: flex;
+}
 
 .form-cancel-button:hover{
   color: #fff;
@@ -212,25 +263,6 @@ html, body{
   width: 100%;
 }
 
-
-.favorite-button {
-  display: block;
-  width: 250px;
-  height: 40px;
-  left: 10px;
-  line-height: 40px;
-  font-size: 18px;
-  font-family: sans-serif;
-  text-decoration: none;
-  color: #333;
-  border: 2px solid #333;
-  letter-spacing: 2px;
-  text-align: center;
-  position: relative;
-  transition: all .35s;
-  border-radius: 10px;
-  cursor: pointer;
-}
 
 @keyframes appear {
   0% {opacity: 0;}
@@ -284,4 +316,11 @@ input[type="checkbox"]:hover + span 	{   /* чекбокс анимация пр
 
 input[type="checkbox"]:checked + span:before { /* чекбокс анимация при нажатии */
     animation: tick .2s ease-in-out;
+}
+
+.leaflet-marker-icon.custom-icon {
+    background-image: url('path_to_your_custom_marker.svg');
+    background-size: contain; /* Размер изображения маркера */
+    background-repeat: no-repeat; /* Запрет повторения изображения */
+    background-position: center; /* Расположение изображения в центре маркера */
 }

@@ -44,13 +44,15 @@
             Добавить точку
         </span>
     </button>
-    <button id="scrollToFooterButton" class="scrollToFooterButton">К списку всех точек</button>
+    <button id="scrollToFooterButton" class="scrollToFooterButton">
+        <span>↓</span>
+    </button>
     <div id="form-container" >
         <form id="add-point-form" enctype="multipart/form-data"   class="add-point-form">
             {% csrf_token %}
             <input type="text" id="title" name="title" placeholder="Название" required><br>
             <textarea id="short_description" name="short_description" placeholder="Краткое описание" required></textarea><br>
-            <input type="file" id="image" name="image" accept="image/*"><br>
+            <input type="file" id="image" name="image" accept="image/*" required><br>
             <input type="hidden" id="latitude" name="latitude">
             <input type="hidden" id="longitude" name="longitude">
             <button type="submit" class="form-button">
@@ -78,17 +80,14 @@
                 <div class="point-description">
                     <h3>{{ point.title }}</h3>
                     <p>{{ point.short_description }}</p>
+                    <button class="focus-button" data-id="{{ point.id }}">Показать на карте</button>
+                </div>
+            <button class="show-all-comments" data-point-id="{{ point.id }}">Комментарии</button>
+             <div id="all-comments-{{ point.id }}" class="all-comments" style="display: none;">
+                    {% include 'comments/comments_list.html' with point=point %}
                 </div>
             </div>
-            <button class="focus-button" data-id="{{ point.id }}">Показать на карте</button>
-            <div class="card border-0">
-                <div class="card-body">
-                    <button class="show-all-comments" data-point-id="{{ point.id }}">Комментарии</button>
-                </div>
-            </div>
-            <div id="all-comments-{{ point.id }}" class="all-comments" style="display: none;">
-                {% include 'comments/comments_list.html' with point=point %}
-            </div>
+
             <hr>
         {% empty %}
             <p>На карте пока нет точек.</p>
@@ -119,7 +118,7 @@
             `;
 
             if (point.fields.images) {
-                popupContent += `<img src="/media/${point.fields.images}" alt="${point.fields.title}" style="max-width: 200px;">`;
+                popupContent += `<img src="/media/${point.fields.images}" alt="${point.fields.title}" style="max-width: 300px;">`;
             }
 
             popupContent += `
@@ -316,7 +315,6 @@
                 });
             });
         });
-
         </script>
         <script src="{% static 'custom/js/backend.js' %}"></script>
         {% block script %}{% endblock %}
