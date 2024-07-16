@@ -103,10 +103,15 @@
         }).addTo(map);
 
         let points = {{ points_json|safe }};
+        let favoritePoints = {{ favorite_points|safe }};
         let markers = {};
 
         function addMarker(point) {
             let marker = L.marker([point.fields.latitude, point.fields.longitude]).addTo(map);
+
+            let isFavorite = favoritePoints.includes(point.pk);
+            let checkboxLabel = isFavorite ? 'Убрать из избранного' : 'Добавить в избранное';
+            let checkboxChecked = isFavorite ? 'checked' : '';
 
             let popupContent = `
                 <h3>${point.fields.title}</h3>
@@ -120,15 +125,14 @@
             popupContent += `
                 <br>
                 <label>
-                    <input type="checkbox" id="favorite-checkbox" name="favorite_checkbox" class="favorite-checkbox" onclick="toggleFavorite(${point.pk})">
+                    <input type="checkbox" id="favorite-checkbox-${point.pk}" name="favorite_checkbox" class="favorite-checkbox" onclick="toggleFavorite(${point.pk})" ${checkboxChecked}>
                     <span></span>
-                    <span class="favorite-checkbox-text">Добавить в избранное<span>
+                    <span class="favorite-checkbox-text">${checkboxLabel}</span>
                 </label>
             `;
 
             marker.bindPopup(popupContent);
 
-            // Сохраняем маркер в объект, используя ID точки как ключ
             markers[point.pk] = marker;
         }
 
@@ -160,10 +164,19 @@
             })
             .then(response => response.json())
             .then(data => {
+                let checkbox = document.getElementById(`favorite-checkbox-${pointId}`);
+                let label = checkbox.nextElementSibling.nextElementSibling;
                 if (data.status === 'added') {
-
+                    checkbox.checked = true;
+                    label.textContent = 'Убрать из избранного';
+                    favoritePoints.push(pointId);
                 } else {
-
+                    checkbox.checked = false;
+                    label.textContent = 'Добавить в избранное';
+                    let index = favoritePoints.indexOf(pointId);
+                    if (index > -1) {
+                        favoritePoints.splice(index, 1);
+                    }
                 }
             })
             .catch(error => console.error('Error:', error));

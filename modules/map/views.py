@@ -23,6 +23,14 @@ class PointsListView(ListView):
         points_json = serialize('json', points)
         context['points_json'] = points_json
         context['form'] = CommentCreateForm()
+        
+        # Добавляем список ID избранных точек пользователя
+        if self.request.user.is_authenticated:
+            favorite_points = self.request.user.favorite_points.values_list('id', flat=True)
+            context['favorite_points'] = list(favorite_points)
+        else:
+            context['favorite_points'] = []
+        
         return context
 
 
