@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Point
 from django.core.serializers import serialize
 from django.http import JsonResponse
@@ -6,10 +6,25 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 
 
-def points_list(request):
-    points = Point.objects.filter(fixed=True)
-    points_json = serialize('json', points)
-    return render(request, 'account/map.html', {'points_json': points_json, 'points': points})
+from django.views.generic import ListView
+from .models import Point
+
+
+class PointsListView(ListView):
+    model = Point
+    template_name = 'account/map.html'
+    context_object_name = 'points'
+
+    def get_queryset(self):
+        return Point.objects.filter(fixed=True)
+
+    def get_context_data(self, *kwargs):
+        context = super().get_context_data(*kwargs)
+        points = self.get_queryset()
+        points_json = serialize('json', points)
+        context['points_json'] = points_json
+        context['form'] = CommentCreateForm()
+        return context
 
 
 @csrf_exempt
@@ -61,5 +76,47 @@ def toggle_favorite(request, point_id):
 def favorite_points(request):
     points = request.user.favorite_points.all()
     return render(request, 'account/favorite_points.html', {'points': points})
+
+from django.views.generic import CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+from .forms import CommentCreateForm
+from .models import Comment
+
+
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentCreateForm
+
+    def is_ajax(self):
+        return self.request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+    def form_invalid(self, form):
+        if self.is_ajax():
+            return JsonResponse({'error': form.errors}, status=400)
+        return super().form_invalid(form)
+
+    def form_valid(self, form):
+        comment = form.save(commit=False)
+        comment.point_id = self.kwargs.get('pk')
+        comment.author = self.request.user
+        comment.parent_id = form.cleaned_data.get('parent')
+        comment.save()
+
+        if self.is_ajax():
+            return JsonResponse({
+                'is_child': comment.is_child_node(),
+                'id': comment.id,
+                'author': comment.author.username,
+                'parent_id': comment.parent_id,
+                'time_create': comment.time_create.strftime('%Y-%b-%d %H:%M:%S'),
+                'content': comment.content,
+                'get_absolute_url': comment.author.profile.get_absolute_url()
+            }, status=200)
+
+        return redirect(comment.point.get_absolute_url())
+
+    def handle_no_permission(self):
+        return JsonResponse({'error': 'Необходимо авторизоваться для добавления комментариев'}, status=400)
 
 # Create your views here.

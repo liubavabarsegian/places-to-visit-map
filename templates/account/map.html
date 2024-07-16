@@ -1,4 +1,5 @@
 {% load static %}
+{% load mptt_tags %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -70,7 +71,7 @@
         <span class="header">Список точек на карте</span>
     <hr>
         {% for point in points %}
-            <div class="point-item" data-id="{{ point.id }}">
+            <div id="point-{{ point.id }}" class="point-item" data-id="{{ point.id }}">
                 {% if point.images %}
                     <img class="point-image" alt="{{ point.title }}" src="/media/{{ point.images }}" style="width:322px"/>
                 {% endif %}
@@ -80,6 +81,14 @@
                 </div>
             </div>
                 <button class="focus-button" data-id="{{ point.id }}">Показать на карте</button>
+                <div class="card border-0">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Комментарии
+                        </h5>
+                        {% include 'comments/comments_list.html' with point=point %}
+                    </div>
+                </div>
                 <hr>
 
         {% empty %}
@@ -275,5 +284,7 @@ document.getElementById('scrollToFooterButton').addEventListener('click', functi
 });
 
         </script>
+        <script src="{% static 'custom/js/backend.js' %}"></script>
+        {% block script %}{% endblock %}
 </body>
 </html>
