@@ -1,14 +1,13 @@
 from django.shortcuts import render, redirect
-from .models import Point
-from django.core.serializers import serialize
+from django.views.generic import ListView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-import json
+from django.core.serializers import serialize
 
-
-from django.views.generic import ListView
-from .models import Point
-
+from .models import Point, Comment
+from .forms import CommentCreateForm
 
 class PointsListView(ListView):
     model = Point

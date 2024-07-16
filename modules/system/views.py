@@ -83,16 +83,9 @@ class UserRegisterView(SuccessMessageMixin, CreateView):
         context['title'] = 'Регистрация на сайте'
         return context
     
+    
 from django.contrib.auth.views import LoginView
-from django.contrib.auth.decorators import login_required
-
-
 from .forms import UserLoginForm
-
-
-@login_required
-def dashboard(request):
-    return render(request, 'account/dashboard.html', {'section': 'dashboard'})
 
 class UserLoginView(SuccessMessageMixin, LoginView):
     """
@@ -100,7 +93,7 @@ class UserLoginView(SuccessMessageMixin, LoginView):
     """
     form_class = UserLoginForm
     template_name = 'system/user_login.html'
-    next_page = 'dashboard'
+    next_page = 'points_list'
     success_message = 'Добро пожаловать на сайт!'
 
     def get_context_data(self, **kwargs):
